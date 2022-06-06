@@ -17,7 +17,7 @@ const user = createStore({
 
   getters: {
     isLoggedIn: function (state) {
-      return state.name !== ''
+      return state.status == 'Success'
     }
   },
 
@@ -91,8 +91,9 @@ const user = createStore({
       await Request.rm_task(task_id)
 
       let index = state.tasks.findIndex((o) => {
-        return o.id === task_id
+        return o.id == task_id
       })
+      console.log('🚀 ~ file: user.ts ~ line 96 ~ index ~ index', index)
       state.tasks.splice(index, 1)
     }
   }

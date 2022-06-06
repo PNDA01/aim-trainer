@@ -35,11 +35,13 @@ const user = createStore({
       state.name = ''
       state.username = ''
       state.password = ''
+      state.tasks = []
       state.status = ''
     }
   },
 
   actions: {
+    /* Trying to sign in a user. */
     signin: async function ({ commit, state }, user: Request.User) {
       console.log(`Trying sign in with ${user}...`)
 
@@ -55,6 +57,7 @@ const user = createStore({
       }
     },
 
+    /* Trying to login a user. */
     login: async function ({ commit, state }, user: Request.User) {
       console.log('Trying login with', user)
       let request = await Request.login(user.username, user.password)
@@ -69,12 +72,14 @@ const user = createStore({
       return request
     },
 
+    /* Adding a task to the user's task list. */
     add_task: async function ({ state }, text: string) {
       console.log(`Adding task: ${text}`)
       const task = await Request.add_task(state.id, text, false)
       state.tasks.push(task)
     },
 
+    /* Updating the task. */
     update_task: async function ({ state }, task: Request.Task) {
       console.log(`Updating task to ${task}`)
       const new_task = await Request.update_task(
@@ -86,6 +91,7 @@ const user = createStore({
       state.tasks.indexOf(task)
     },
 
+    /* Removing a task from the user's task list. */
     rm_task: async function ({ state }, task_id: number) {
       console.log(`Removing task: ${task_id}`)
       await Request.rm_task(task_id)
@@ -93,7 +99,6 @@ const user = createStore({
       let index = state.tasks.findIndex((o) => {
         return o.id == task_id
       })
-      console.log('🚀 ~ file: user.ts ~ line 96 ~ index ~ index', index)
       state.tasks.splice(index, 1)
     }
   }

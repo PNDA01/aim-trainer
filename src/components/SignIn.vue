@@ -5,6 +5,8 @@ import router from '../router'
 
 export default {
   setup() {
+    // A function that is called when the form is submitted. It calls the signin action in the user
+    // store and if the status is Success, it redirects to the todo page.
     const onSubmit = async () => {
       await user.dispatch('signin', user.state)
       if (user.state.status === 'Success') {

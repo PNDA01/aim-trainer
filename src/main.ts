@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -8,6 +6,7 @@ const app = createApp(App)
 app.use(router)
 app.mount('#app')
 
+/* Creating an array of color palettes. */
 export const themes = [
   {
     background: '#1A1A2E',
@@ -41,6 +40,11 @@ export const themes = [
   }
 ]
 
+/**
+ * It takes a theme object as an argument, and then sets the root element's style properties to the
+ * values of the theme object's properties.
+ * @param {any} theme - any
+ */
 const setTheme = (theme: any) => {
   const root: any = document.querySelector(':root')
   root.style.setProperty('--background', theme.background)
@@ -48,6 +52,11 @@ const setTheme = (theme: any) => {
   root.style.setProperty('--primary-color', theme.primaryColor)
 }
 
+/**
+ * For each theme in the themes array, create a div element, set its class name to 'theme-btn', set its
+ * style to the theme's background color, append it to the btnContainer, and add an event listener to
+ * it that calls the setTheme function with the theme as an argument.
+ */
 const displayThemeButtons = () => {
   const btnContainer = document.querySelector('.theme-btn-container')
   themes.forEach((theme) => {

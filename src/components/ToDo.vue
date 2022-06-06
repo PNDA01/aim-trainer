@@ -12,6 +12,8 @@ export default defineComponent({
     }
   },
   methods: {
+    // An async function that is called when the user clicks the add task button. It checks if the task
+    // is not empty and then dispatches the add_task action to the user store.
     addTask: async function () {
       if (this.task !== '') {
         await user.dispatch('add_task', this.task)
@@ -19,6 +21,9 @@ export default defineComponent({
       }
     },
 
+    // This function is called when the user clicks on the checkbox. It gets the status of the task and
+    // then creates a new task object with the new status. It then dispatches the update_task action to
+    // the user store.
     updateStatus: async function (e: any) {
       let newStatus =
         e.currentTarget.parentElement.getAttribute('data-status') == 'true'
@@ -31,6 +36,10 @@ export default defineComponent({
       }
       await user.dispatch('update_task', newTask)
     },
+    // This function is called when the user clicks on the modify button. It checks if the editIndex is
+    // -1. If it is, it sets the editIndex to the index of the task. If it is not, it creates a new
+    // task object with the new text and status and then dispatches the update_task action to the user
+    // store.
     updateText: async function (e: any) {
       if (this.editIndex === -1) {
         this.editIndex = e.currentTarget.getAttribute('data-ind')
@@ -45,6 +54,8 @@ export default defineComponent({
       }
     },
 
+    // This function is called when the user clicks on the delete button. It gets the id of the task
+    // and then dispatches the rm_task action to the user store.
     rmTask: async function (e: any) {
       const task_id = e.currentTarget.getAttribute('data-id')
       await user.dispatch('rm_task', task_id)

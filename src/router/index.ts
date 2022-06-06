@@ -3,6 +3,9 @@ import ToDo from '../components/ToDo.vue'
 import Login from '../components/Login.vue'
 import SignIn from '../components/Signin.vue'
 
+/* An array of objects. Each object has a path and a component. The path is the url that will be used
+to access the component. The component is the component that will be displayed when the path is
+accessed. */
 const routes = [
   {
     path: '/',

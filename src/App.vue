@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import user from './stores/user'
 
-const logout = async () => {
-  await user.commit('logout')
+// A function that is called when the user clicks the logout button. It is an async function that waits
+// for the user.commit('logout') to finish before continuing.
+const logout = () => {
+  user.commit('logout')
 }
 </script>
 

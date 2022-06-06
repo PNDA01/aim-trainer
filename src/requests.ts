@@ -16,6 +16,11 @@ export type UserList = Array<User>
 const usersUrl = 'http://localhost:8080/api/users'
 const todosUrl = 'http://localhost:8080/api/todos'
 
+/**
+ * It makes a GET request to the URL specified in the `usersUrl` variable, and returns the response as
+ * a JSON object
+ * @returns An array of users.
+ */
 export async function getUsers() {
   var requestOptions: RequestInit = {
     method: 'GET',
@@ -27,6 +32,12 @@ export async function getUsers() {
   return users
 }
 
+/**
+ * It returns a user object if the username and password match, otherwise it returns undefined
+ * @param {string} username - string, password: string
+ * @param {string} password - string
+ * @returns The user object that matches the username and password.
+ */
 export async function login(username: string, password: string) {
   const usersJson = await getUsers()
   return usersJson.find(
@@ -34,11 +45,24 @@ export async function login(username: string, password: string) {
   )
 }
 
+/**
+ * It reads all users and returns the user with the given username
+ * @param {string} username - string
+ * @returns A Promise that resolves to a User object.
+ */
 export async function readByUsername(username: string) {
   const usersJson = await getUsers()
   return usersJson.find((u: User) => u.username === username)
 }
 
+/**
+ * Signs user in.
+ * It takes a name, username, and password, and returns a user object.
+ * @param {string} name - string
+ * @param {string} username - string
+ * @param {string} password - string
+ * @returns The user object
+ */
 export async function signin(name: string, username: string, password: string) {
   let myHeaders = new Headers()
   myHeaders.append('Content-Type', 'application/json')
@@ -61,6 +85,14 @@ export async function signin(name: string, username: string, password: string) {
   return user
 }
 
+/**
+ * Adds a task for user with user_id
+ * It takes a user_id, text, and status, and returns a task.
+ * @param {number} user_id - number
+ * @param {string} text - string
+ * @param {boolean} status - boolean
+ * @returns A promise.
+ */
 export async function add_task(user_id: number, text: string, status: boolean) {
   let url = `${usersUrl}/${user_id}/todos`
 
@@ -84,6 +116,14 @@ export async function add_task(user_id: number, text: string, status: boolean) {
   return task
 }
 
+/**
+ * It takes in a user_id, task_id, text, and status and updates the task with the given task_id for the
+ * user with the given user_id.
+ * @param {number} user_id - number - the id of the user
+ * @param {number} task_id - number,
+ * @param {string} text - string,
+ * @param {boolean} status - boolean
+ */
 export async function update_task(
   user_id: number,
   task_id: number,
@@ -111,6 +151,11 @@ export async function update_task(
   await fetch(url, requestOptions)
 }
 
+/**
+ * It takes a user_id and returns a list of tasks
+ * @param {number} user_id - number
+ * @returns An array of tasks.
+ */
 export async function get_tasks(user_id: number) {
   let url = `${usersUrl}/${user_id}/todos`
 
@@ -124,6 +169,11 @@ export async function get_tasks(user_id: number) {
   return tasks
 }
 
+/**
+ * It takes a task id, and then it makes a DELETE request to the server, and then it waits for the
+ * server to respond
+ * @param {number} task_id - number
+ */
 export async function rm_task(task_id: number) {
   let url = `${todosUrl}/${task_id}`
 

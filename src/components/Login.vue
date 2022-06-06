@@ -1,11 +1,12 @@
 <script lang="ts">
+import { defineComponent } from 'vue'
 import user from '../stores/user'
 import router from '../router'
 
 export default {
   setup() {
     const onSubmit = async () => {
-      await user.dispatch('login', user)
+      await user.dispatch('login', user.state)
       if (user.state.status === 'Success') {
         router.push('/todo')
       }
@@ -28,11 +29,15 @@ export default {
         <h1 class="opacity">LOGIN</h1>
         <h4 class="opacity">{{ user.state.status }}</h4>
         <form v-on:submit.prevent="onSubmit">
-          <input type="text" placeholder="USERNAME" v-model="user.username" />
+          <input
+            type="text"
+            placeholder="USERNAME"
+            v-model="user.state.username"
+          />
           <input
             type="password"
             placeholder="PASSWORD"
-            v-model="user.password"
+            v-model="user.state.password"
           />
           <button class="opacity" type="submit">SUBMIT</button>
         </form>

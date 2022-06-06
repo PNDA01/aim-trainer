@@ -5,6 +5,10 @@ import SignIn from '../components/Signin.vue'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/todo',
     component: ToDo
   },

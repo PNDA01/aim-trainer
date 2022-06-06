@@ -1,116 +1,90 @@
 <script lang="ts">
+import { defineComponent } from 'vue'
 import user from '../stores/user'
-import * as Request from '../requests'
 
-export default {
+export default defineComponent({
   name: 'ToDo',
-  setup() {
-    let task = ''
-    let editedTask = -1
-    let tasks: Request.Task[] = user.state.tasks
-    const statuses = ['To Do', 'In Progress', 'Finished']
-
-    function capitalizeFirstChar(str: string) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-
-    function changeStatus(index: number) {
-      let newIndex = statuses.indexOf(tasks[index].status)
-      if (++newIndex > 2) newIndex = 0
-      tasks[index].status = statuses[newIndex]
-    }
-    function deleteTask(index: number) {
-      tasks.splice(index, 1)
-    }
-    function editTask(index: number) {
-      task = tasks[index].text
-      editedTask = index
-    }
-    function onSubmit() {
-      if (task.length === 0) return
-      if (editedTask !== -1) {
-        tasks[editedTask].text = task
-        editedTask = -1
-      } else {
-        tasks.push({
-          text: task,
-          status: 'To Do'
-        })
-      }
-    }
-
+  data() {
     return {
-      task,
-      tasks,
-      statuses,
-      capitalizeFirstChar,
-      changeStatus,
-      deleteTask,
-      editTask,
-      onSubmit
+      tasks: user.state.tasks,
+      task: ''
+    }
+  },
+  methods: {
+    addTask: async function () {
+      console.log('🚀 ~ file: ToDo.vue ~ line 14 ~ addTask ~ task', this.task)
+      if (this.task !== '') {
+        await user.dispatch('add_task', this.task)
+        this.task = ''
+      }
+    },
+
+    updateTask: async function () {
+      if (this.task !== '') {
+      }
+    },
+    rmTask: async function (e: any) {
+      const task_id = e.currentTarget.getAttribute('data-id')
+      await user.dispatch('rm_task', task_id)
     }
   }
-}
+})
 </script>
 
 <template>
   <div class="todo-container">
     <h1 class="opacity">TO DO LIST</h1>
-    <form class="todo" v-on:submit.prevent="onSubmit">
+    <form class="todo" v-on:submit.prevent="addTask">
       <input type="text" v-model="task" placeholder="Enter task" />
-      <button class="opacity" type="submit">SUBMIT</button>
+      <button class="opacity" type="submit">ADD TASK</button>
     </form>
-
-    <table class="todo">
-      <thead>
-        <tr>
-          <th scope="col">Task</th>
-          <th scope="col" style="width: 120px">Status</th>
-          <th scope="col">#</th>
-          <th scope="col">#</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(task, index) in tasks" :key="index">
-          <td>
-            <span>
-              {{ task.text }}
-            </span>
-          </td>
-          <td>
-            <span class="pointer noselect" v-on:click="changeStatus(index)">
-              {{ capitalizeFirstChar(task.status) }}
-            </span>
-          </td>
-          <td>
-            <div v-on:click="deleteTask(index)">
-              <img src="../assets/bin.png" />
-            </div>
-          </td>
-          <td class="text-center">
-            <div v-on:click="editTask(index)">
-              <img src="../assets/pen.png" />
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="todo" v-for="t in tasks" :key="t.id">
+      <div class="list-item-holder" :data-status="t.status">
+        <div class="checkbox-items" :data-status="t.status">
+          <input type="checkbox" :data="t.id" v-model="t.status" />
+          <label>{{ t.text }}</label>
+        </div>
+        <div class="button-container">
+          <div class="item" :data-id="t.id">Modify</div>
+          <div class="item" :data-id="t.id" v-on:click="rmTask">Delete</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.pointer {
+.list-item-holder {
+  display: flex;
+  padding: 1rem 1rem;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+.item {
+  flex: 1;
+  font-size: 0.875rem;
+  margin: 0 0 0 0.5rem;
+  border-radius: 100px;
+  transition: all 0.1s ease-out;
   cursor: pointer;
+  padding: 0.25rem 0.75rem;
 }
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+.checkbox-items {
+  display: flex;
+  align-items: center;
 }
-.line-through {
+.item:hover {
+  background: var(--color);
+}
+[data-status='false'] label {
+  color: var(--color);
+  font-weight: 600;
+}
+[data-status='true'] label {
   text-decoration: line-through;
 }
 </style>

@@ -2,7 +2,7 @@
 import user from './stores/user'
 
 const logout = async () => {
-  await user.dispatch('logout')
+  await user.commit('logout')
 }
 </script>
 
@@ -101,6 +101,35 @@ header {
 
 .todo {
   width: 60%;
+}
+
+input[type='submit'] {
+  background: #0028ff;
+  color: white;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  border: none;
+  box-shadow: 0 5px 10px #0428ff7a;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+}
+input[type='checkbox'] {
+  width: auto;
+  margin: 0 0.5rem 0 0;
+}
+input[type='submit']:hover {
+  background: #3600ff;
+  box-shadow: 0 3px 7px #0428ff7a;
+}
+input {
+  border-radius: 10px;
+  box-sizing: border-box;
+  border: 1px solid #aaa;
+  font-size: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
 }
 
 .log-sign-container {

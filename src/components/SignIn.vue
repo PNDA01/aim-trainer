@@ -6,7 +6,7 @@ import router from '../router'
 export default {
   setup() {
     const onSubmit = async () => {
-      await user.dispatch('login', user.state)
+      await user.dispatch('signin', user.state)
       if (user.state.status === 'Success') {
         router.push('/todo')
       }

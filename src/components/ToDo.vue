@@ -7,22 +7,44 @@ export default defineComponent({
   data() {
     return {
       tasks: user.state.tasks,
-      task: ''
+      task: '',
+      editIndex: -1
     }
   },
   methods: {
     addTask: async function () {
-      console.log('🚀 ~ file: ToDo.vue ~ line 14 ~ addTask ~ task', this.task)
       if (this.task !== '') {
         await user.dispatch('add_task', this.task)
         this.task = ''
       }
     },
 
-    updateTask: async function () {
-      if (this.task !== '') {
+    updateStatus: async function (e: any) {
+      let newStatus =
+        e.currentTarget.parentElement.getAttribute('data-status') == 'true'
+          ? false
+          : true
+      let newTask = {
+        id: e.currentTarget.getAttribute('data-id'),
+        text: e.currentTarget.getAttribute('data-text'),
+        status: newStatus
+      }
+      await user.dispatch('update_task', newTask)
+    },
+    updateText: async function (e: any) {
+      if (this.editIndex === -1) {
+        this.editIndex = e.currentTarget.getAttribute('data-ind')
+      } else {
+        let newTask = {
+          id: e.currentTarget.getAttribute('data-id'),
+          text: this.tasks[this.editIndex].text,
+          status: e.currentTarget.getAttribute('data-status')
+        }
+        await user.dispatch('update_task', newTask)
+        this.editIndex = -1
       }
     },
+
     rmTask: async function (e: any) {
       const task_id = e.currentTarget.getAttribute('data-id')
       await user.dispatch('rm_task', task_id)
@@ -38,14 +60,36 @@ export default defineComponent({
       <input type="text" v-model="task" placeholder="Enter task" />
       <button class="opacity" type="submit">ADD TASK</button>
     </form>
-    <div class="todo" v-for="t in tasks" :key="t.id">
+    <div class="todo" v-for="(t, index) in tasks" :key="t.id">
       <div class="list-item-holder" :data-status="t.status">
         <div class="checkbox-items" :data-status="t.status">
-          <input type="checkbox" :data="t.id" v-model="t.status" />
-          <label>{{ t.text }}</label>
+          <input
+            type="checkbox"
+            :data-id="t.id"
+            :data-text="t.text"
+            v-model="t.status"
+            v-on:click="updateStatus"
+          />
+          <input
+            v-if="editIndex == index"
+            class="edit-input"
+            type="text"
+            v-model="t.text"
+            placeholder="Enter task"
+          />
+          <label v-else>{{ t.text }}</label>
         </div>
         <div class="button-container">
-          <div class="item" :data-id="t.id">Modify</div>
+          <div
+            class="item"
+            :data-ind="index"
+            :data-id="t.id"
+            :data-text="t.text"
+            :data-status="t.status"
+            v-on:click="updateText"
+          >
+            {{ editIndex == index ? 'Save' : 'Modify' }}
+          </div>
           <div class="item" :data-id="t.id" v-on:click="rmTask">Delete</div>
         </div>
       </div>

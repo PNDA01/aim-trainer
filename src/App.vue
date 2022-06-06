@@ -103,35 +103,6 @@ header {
   width: 60%;
 }
 
-input[type='submit'] {
-  background: #0028ff;
-  color: white;
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
-  border: none;
-  box-shadow: 0 5px 10px #0428ff7a;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.25s ease-out;
-  cursor: pointer;
-}
-input[type='checkbox'] {
-  width: auto;
-  margin: 0 0.5rem 0 0;
-}
-input[type='submit']:hover {
-  background: #3600ff;
-  box-shadow: 0 3px 7px #0428ff7a;
-}
-input {
-  border-radius: 10px;
-  box-sizing: border-box;
-  border: 1px solid #aaa;
-  font-size: 1rem;
-  width: 100%;
-  padding: 0.5rem 1rem;
-}
-
 .log-sign-container {
   position: relative;
   width: 22.2rem;
@@ -149,7 +120,7 @@ input {
   -o-border-radius: 10px;
 }
 
-input {
+form input {
   display: block;
   padding: 14.5px;
   width: 100%;
@@ -173,6 +144,15 @@ input:focus {
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
   animation: wobble 0.3s ease-in;
   -webkit-animation: wobble 0.3s ease-in;
+}
+
+.edit-input {
+  margin-left: 1rem;
+}
+
+input[type='checkbox'] {
+  width: auto;
+  margin: 0 1rem 0 0;
 }
 
 button {

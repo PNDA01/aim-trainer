@@ -6,7 +6,7 @@ const app = createApp(App)
 app.use(router)
 app.mount('#app')
 
-const themes = [
+export const themes = [
   {
     background: '#1A1A2E',
     color: '#FFFFFF',
@@ -34,7 +34,7 @@ const themes = [
   },
   {
     background: '#231F20',
-    color: '#FFF',
+    color: '#FFFFFF',
     primaryColor: '#BB4430'
   }
 ]
@@ -44,7 +44,6 @@ const setTheme = (theme: any) => {
   root.style.setProperty('--background', theme.background)
   root.style.setProperty('--color', theme.color)
   root.style.setProperty('--primary-color', theme.primaryColor)
-  root.style.setProperty('--glass-color', theme.glassColor)
 }
 
 const displayThemeButtons = () => {
@@ -53,7 +52,7 @@ const displayThemeButtons = () => {
     const div = document.createElement('div')
     div.className = 'theme-btn'
     div.style.cssText = `background: ${theme.background}; width: 25px; height: 25px`
-    btnContainer && btnContainer.appendChild(div)
+    btnContainer!.appendChild(div)
     div.addEventListener('click', () => setTheme(theme))
   })
 }

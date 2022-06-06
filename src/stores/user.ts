@@ -1,13 +1,18 @@
 import { createStore } from 'vuex'
 import * as Request from '../requests'
 
+const tasks: Request.Task[] = []
+
 const user = createStore({
   state: {
+    id: -1,
     name: '',
     username: '',
     password: '',
 
-    status: ''
+    status: '',
+
+    tasks: tasks
   },
 
   getters: {
@@ -18,10 +23,12 @@ const user = createStore({
 
   mutations: {
     logUser: function (state, user: Request.User) {
+      state.id = user.id
       state.name = user.name
       state.username = user.username
       state.password = user.password
-      state.status = ''
+      state.status = 'Success'
+      state.tasks = user.tasks
     }
   },
 
@@ -32,6 +39,7 @@ const user = createStore({
         state.status = 'Username already in use'
       } else {
         await Request.signin(user.name, user.username, user.password)
+        user = await Request.exists(user.username)
         commit('logUser', user)
       }
     },
@@ -46,6 +54,7 @@ const user = createStore({
       state.name = ''
       state.username = ''
       state.password = ''
+      state.status = ''
     }
   }
 })

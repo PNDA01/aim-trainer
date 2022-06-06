@@ -1,10 +1,14 @@
 <script lang="ts">
 import user from '../stores/user'
+import router from '../router'
 
 export default {
   setup() {
     const onSubmit = async () => {
       await user.dispatch('signin', user)
+      if (user.state.status === 'Success') {
+        router.push('/todo')
+      }
     }
     return { user, onSubmit }
   }
@@ -15,7 +19,7 @@ export default {
   <section class="container">
     <div class="log-sign-container">
       <div class="circle circle-one"></div>
-      <div class="form-container">
+      <div class="sub-container">
         <img
           src="../assets/illustration.png"
           alt="illustration"
@@ -43,6 +47,5 @@ export default {
       </div>
       <div class="circle circle-two"></div>
     </div>
-    <div class="theme-btn-container"></div>
   </section>
 </template>

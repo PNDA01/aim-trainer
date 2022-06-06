@@ -7,19 +7,27 @@ const logout = async () => {
 </script>
 
 <template>
-  <router-view v-if="!user.getters.isLoggedIn" />
-  <div v-else class="container">
-    <div class="log-sign-container">
-      <h1 class="opacity">Welcome, {{ user.state.name }}</h1>
-      <form>
-        <button class="opacity" v-on:click="logout">LOGOUT</button>
-      </form>
-    </div>
-  </div>
+  <header v-if="!user.getters.isLoggedIn">
+    <router-link class="header" to="/signin">SIGN IN</router-link>
+    <router-link class="header" to="/login">LOGIN</router-link>
+  </header>
+  <header v-else>
+    <router-link class="header" to="/login" v-on:click="logout">
+      LOGOUT
+    </router-link>
+    <text class="header">Welcome, {{ user.state.name }}</text>
+  </header>
+  <router-view></router-view>
+  <div class="theme-btn-container"></div>
 </template>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;800&display=swap');
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
 
 :root {
   --background: #1a1a2e;
@@ -58,19 +66,49 @@ h1 {
   font-size: 2.5rem;
 }
 
-.container {
+header {
+  overflow: hidden;
+}
+
+.header {
+  float: right;
+  color: var(--color);
+  text-align: center;
+  padding: 12px 12px 0;
+}
+
+#title {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
+}
+
+.todo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.todo {
+  width: 60%;
 }
 
 .log-sign-container {
   position: relative;
   width: 22.2rem;
 }
-.form-container {
-  border: 1px solid hsla(0, 0%, 65%, 0.158);
+.sub-container {
+  border: 2px inset hsla(0, 0%, 65%, 0.158);
   box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   backdrop-filter: blur(20px);
@@ -82,7 +120,7 @@ h1 {
   -o-border-radius: 10px;
 }
 
-.log-sign-container form input {
+input {
   display: block;
   padding: 14.5px;
   width: 100%;
@@ -102,13 +140,13 @@ h1 {
   -o-border-radius: 5px;
 }
 
-.log-sign-container form input:focus {
+input:focus {
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
   animation: wobble 0.3s ease-in;
   -webkit-animation: wobble 0.3s ease-in;
 }
 
-.log-sign-container form button {
+button {
   background-color: var(--primary-color);
   color: var(--color);
   display: block;
@@ -133,7 +171,7 @@ h1 {
   -o-transition: all 0.1s ease-in-out;
 }
 
-.log-sign-container form button:hover {
+button:hover {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.15);
   transform: scale(1.02);
   -webkit-transform: scale(1.02);

@@ -1,7 +1,18 @@
-export type User = { name: string; username: string; password: string }
+export type User = {
+  id: number
+  name: string
+  username: string
+  password: string
+  tasks: Task[]
+}
+
+export type Task = {
+  text: string
+  status: string
+}
 export type UserList = Array<User>
 
-const baseUrl = 'http://localhost:8080/rest/users'
+const baseUrl = 'http://localhost:8080/api/users'
 
 export async function getUsers() {
   var requestOptions: RequestInit = {
@@ -28,19 +39,56 @@ export async function exists(username: string) {
 
 export async function signin(name: string, username: string, password: string) {
   let myHeaders = new Headers()
-  myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+  myHeaders.append('Content-Type', 'application/json')
 
-  var urlencoded = new URLSearchParams()
-  urlencoded.append('name', name)
-  urlencoded.append('username', username)
-  urlencoded.append('password', password)
+  var raw = JSON.stringify({
+    name: name,
+    username: username,
+    password: password
+  })
 
   let requestOptions: RequestInit = {
     method: 'POST',
     headers: myHeaders,
-    body: urlencoded,
+    body: raw,
     redirect: 'follow'
   }
 
-  await fetch(baseUrl, requestOptions)
+  const request = await fetch(baseUrl, requestOptions)
+  const user = await request.json()
+  return user
+}
+
+export async function addtask(user_id: number, text: string, status: string) {
+  let url = `${baseUrl}/${user_id}/todos`
+
+  let myHeaders = new Headers()
+  myHeaders.append('Content-Type', 'application/json')
+
+  var raw = JSON.stringify({
+    text: text,
+    status: status
+  })
+
+  let requestOptions: RequestInit = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  }
+
+  await fetch(url, requestOptions)
+}
+
+export async function gettasks(user_id: number) {
+  let url = `${baseUrl}/${user_id}/todos`
+
+  let requestOptions: RequestInit = {
+    method: 'GET',
+    redirect: 'follow'
+  }
+
+  const request = await fetch(url, requestOptions)
+  const tasks: Task[] = await request.json()
+  return tasks
 }
